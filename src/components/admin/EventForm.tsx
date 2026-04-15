@@ -6,19 +6,19 @@ import { useRouter } from "next/navigation";
 interface ScheduleItem {
   time: string;
   title: string;
-  description?: string;
-  speaker?: string;
-  room?: string;
+  description?: string | null;
+  speaker?: string | null;
+  room?: string | null;
   order: number;
 }
 
 interface Speaker {
   name: string;
-  title?: string;
-  company?: string;
-  bio?: string;
-  talkTitle?: string;
-  linkedinUrl?: string;
+  title?: string | null;
+  company?: string | null;
+  bio?: string | null;
+  talkTitle?: string | null;
+  linkedinUrl?: string | null;
   order: number;
 }
 
@@ -26,12 +26,12 @@ interface EventData {
   id?: string;
   title: string;
   description: string;
-  shortDesc?: string;
+  shortDesc?: string | null;
   location: string;
-  address?: string;
-  startDate: string;
-  endDate: string;
-  coverImage?: string;
+  address?: string | null;
+  startDate: string | Date;
+  endDate: string | Date;
+  coverImage?: string | null;
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
   isFeatured: boolean;
   scheduleItems?: ScheduleItem[];
