@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id            String        @id @default(cuid())
+  title         String
+  slug          String        @unique
+  description   String
+  shortDesc     String?
+  location      String
+  address       String?
+  startDate     DateTime
+  endDate       DateTime
+  coverImage    String?
+  status        EventStatus   @default(DRAFT)
+  isFeatured    Boolean       @default(false)
+  scheduleItems ScheduleItem[]
+  speakers      Speaker[]
+  sponsors      Sponsor[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model ScheduleItem {
+  id          String   @id @default(cuid())
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  time        String
+  title       String
+  description String?
+  speaker     String?
+  room        String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Speaker {
+  id          String   @id @default(cuid())
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name        String
+  title       String?
+  company     String?
+  bio         String?
+  photo       String?
+  talkTitle   String?
+  linkedinUrl String?
+  order       Int      @default(0)
+}
+
+model Sponsor {
+  id         String      @id @default(cuid())
+  eventId    String
+  event      Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name       String
+  logoUrl    String?
+  websiteUrl String?
+  tier       SponsorTier @default(GENERAL)
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SponsorTier {
+  PLATINUM
+  GOLD
+  SILVER
+  GENERAL
+}
