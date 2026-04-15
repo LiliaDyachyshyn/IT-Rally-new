@@ -61,7 +61,7 @@ const emptySpeaker = (): Speaker => ({
   order: 0,
 });
 
-function toInputDate(dateStr: string) {
+function toInputDate(dateStr: string | Date) {
   return dateStr ? new Date(dateStr).toISOString().slice(0, 16) : "";
 }
 
