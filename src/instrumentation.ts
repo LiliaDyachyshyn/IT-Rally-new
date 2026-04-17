@@ -78,5 +78,22 @@ export async function register() {
         console.error("[instrumentation] SQL failed:", e);
       }
     }
+
+    // Seed admin user from env vars if none exists
+    try {
+      const bcrypt = await import("bcryptjs");
+      const email = process.env.ADMIN_EMAIL ?? "admin@itrally.org";
+      const password = process.env.ADMIN_PASSWORD ?? "changeme123";
+      const existing = await prisma.adminUser.findUnique({ where: { email } });
+      if (!existing) {
+        const hashed = await bcrypt.hash(password, 12);
+        await prisma.adminUser.create({
+          data: { email, password: hashed, name: "Admin" },
+        });
+        console.log("[instrumentation] Admin user created:", email);
+      }
+    } catch (e) {
+      console.error("[instrumentation] Admin seed failed:", e);
+    }
   }
 }
