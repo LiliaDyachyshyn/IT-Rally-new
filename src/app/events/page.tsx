@@ -4,7 +4,7 @@ import Link from "next/link";
 import Navbar from "@/components/public/Navbar";
 import Footer from "@/components/public/Footer";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function EventsPage() {
   const events = await prisma.event.findMany({
