@@ -8,11 +8,15 @@ import Footer from "@/components/public/Footer";
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const events = await prisma.event.findMany({
-    where: { status: "PUBLISHED" },
-    select: { slug: true },
-  });
-  return events.map((e) => ({ slug: e.slug }));
+  try {
+    const events = await prisma.event.findMany({
+      where: { status: "PUBLISHED" },
+      select: { slug: true },
+    });
+    return events.map((e) => ({ slug: e.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export default async function EventPage({
